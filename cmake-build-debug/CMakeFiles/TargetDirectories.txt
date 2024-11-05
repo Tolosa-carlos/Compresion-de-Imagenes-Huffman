@@ -1,0 +1,3 @@
+C:/Users/carlo_cq0emdi/OneDrive/Escritorio/Paradigmas II/TPFinal/cmake-build-debug/CMakeFiles/TPFinal.dir
+C:/Users/carlo_cq0emdi/OneDrive/Escritorio/Paradigmas II/TPFinal/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/carlo_cq0emdi/OneDrive/Escritorio/Paradigmas II/TPFinal/cmake-build-debug/CMakeFiles/rebuild_cache.dir
