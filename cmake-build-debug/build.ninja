@@ -52,12 +52,21 @@ build cmake_object_order_depends_target_TPFinal: phony || .
 build CMakeFiles/TPFinal.dir/main.cpp.obj: CXX_COMPILER__TPFinal_unscanned_Debug C$:/Users/carlo_cq0emdi/OneDrive/Escritorio/Paradigmas$ II/TPFinal/main.cpp || cmake_object_order_depends_target_TPFinal
   DEP_FILE = CMakeFiles\TPFinal.dir\main.cpp.obj.d
   FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -I"C:/Users/carlo_cq0emdi/OneDrive/Escritorio/Paradigmas II/TPFinal/include"
   OBJECT_DIR = CMakeFiles\TPFinal.dir
   OBJECT_FILE_DIR = CMakeFiles\TPFinal.dir
 
 build CMakeFiles/TPFinal.dir/Huffman.cpp.obj: CXX_COMPILER__TPFinal_unscanned_Debug C$:/Users/carlo_cq0emdi/OneDrive/Escritorio/Paradigmas$ II/TPFinal/Huffman.cpp || cmake_object_order_depends_target_TPFinal
   DEP_FILE = CMakeFiles\TPFinal.dir\Huffman.cpp.obj.d
   FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -I"C:/Users/carlo_cq0emdi/OneDrive/Escritorio/Paradigmas II/TPFinal/include"
+  OBJECT_DIR = CMakeFiles\TPFinal.dir
+  OBJECT_FILE_DIR = CMakeFiles\TPFinal.dir
+
+build CMakeFiles/TPFinal.dir/STB_IMAGE_IMPLEMENTATION.cpp.obj: CXX_COMPILER__TPFinal_unscanned_Debug C$:/Users/carlo_cq0emdi/OneDrive/Escritorio/Paradigmas$ II/TPFinal/STB_IMAGE_IMPLEMENTATION.cpp || cmake_object_order_depends_target_TPFinal
+  DEP_FILE = CMakeFiles\TPFinal.dir\STB_IMAGE_IMPLEMENTATION.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -I"C:/Users/carlo_cq0emdi/OneDrive/Escritorio/Paradigmas II/TPFinal/include"
   OBJECT_DIR = CMakeFiles\TPFinal.dir
   OBJECT_FILE_DIR = CMakeFiles\TPFinal.dir
 
@@ -69,7 +78,7 @@ build CMakeFiles/TPFinal.dir/Huffman.cpp.obj: CXX_COMPILER__TPFinal_unscanned_De
 #############################################
 # Link the executable TPFinal.exe
 
-build TPFinal.exe: CXX_EXECUTABLE_LINKER__TPFinal_Debug CMakeFiles/TPFinal.dir/main.cpp.obj CMakeFiles/TPFinal.dir/Huffman.cpp.obj
+build TPFinal.exe: CXX_EXECUTABLE_LINKER__TPFinal_Debug CMakeFiles/TPFinal.dir/main.cpp.obj CMakeFiles/TPFinal.dir/Huffman.cpp.obj CMakeFiles/TPFinal.dir/STB_IMAGE_IMPLEMENTATION.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\TPFinal.dir

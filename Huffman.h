@@ -4,8 +4,11 @@
 
 #ifndef TPFINAL_HUFFMAN_H
 #define TPFINAL_HUFFMAN_H
+
+
 #include <iostream>
 #include <unordered_map>
+#include <vector>
 
 struct nodoHuffman{ //Define un nodo del arbol de Huffman que tiene un caracter, su frecuencia y punteros a los dos nodos hijos
     char caracter;
@@ -24,7 +27,7 @@ nodoHuffman* crearNodo(char caracter, int frecuencia, nodoHuffman* izq, nodoHuff
 nodoHuffman* arbolHuffman(const std::unordered_map<char, int>& frecuencia); // Crea el arbol usando una cola de prioridad segun la frecuencia de los caracteres
 void generarCodigo(nodoHuffman* ruta, std::string& caracter, std::unordered_map<char, std::string>& codigoHuffman);
 
-
+bool leerImagen(const char* nombreArchivo, std::vector<unsigned char>& datosImagen, int& ancho, int& alto, int& canales); // canales: 1- escala de grisees, 3- RGB, 4- RGBA
 
 
 #endif //TPFINAL_HUFFMAN_H
