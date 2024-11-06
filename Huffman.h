@@ -28,6 +28,6 @@ nodoHuffman* arbolHuffman(const std::unordered_map<char, int>& frecuencia); // C
 void generarCodigo(nodoHuffman* ruta, std::string& caracter, std::unordered_map<char, std::string>& codigoHuffman);
 
 bool leerImagen(const char* nombreArchivo, std::vector<unsigned char>& datosImagen, int& ancho, int& alto, int& canales); // canales: 1- escala de grisees, 3- RGB, 4- RGBA
-
+bool escribirImagen(const char* nombreArchivo, const std::vector<unsigned char>& datosImagen, int ancho, int alto, int canales);
 
 #endif //TPFINAL_HUFFMAN_H

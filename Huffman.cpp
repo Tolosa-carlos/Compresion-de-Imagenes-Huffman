@@ -1,15 +1,14 @@
 //
 // Created by carlo_cq0emdi on 11/5/2024.
 //
-#define STB_IMAGE_IMPLEMENTATION
+
 #include "Huffman.h"
 #include <queue>
 #include <vector>
+
+#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #include "stb_image_write.h"
-
-
-
 
 
 //1.
@@ -57,6 +56,23 @@ void generarCodigo(nodoHuffman* ruta, const std::string& caracter, std::unordere
 //4.
 bool leerImagen(const char* nombreArchivo, std::vector<unsigned char>& datosImagen, int& ancho, int& alto, int& canales){
     unsigned char* datos = stbi_load(nombreArchivo, &ancho, &alto, &canales, 0);
+    if(!datos){
+        std::cerr<< "Error al leer la imagen." << std::endl;
+        return false;
+    }
+
+    datosImagen.assign(datos, datos + (ancho*alto*canales));
+    stbi_image_free(datos);
+    return true;
+}
+
+//5.
+bool escribirImagen(const char* nombreArchivo, const std::vector<unsigned char>& datosImagen, int ancho, int alto, int canales){
+    if(!stbi_write_png(nombreArchivo, ancho, alto, canales, datosImagen.data(), ancho*canales)){
+        std::cerr<< "Error al escribir la imagen."<< std::endl;
+        return false;
+    }
+    return true;
 }
 
 
@@ -85,4 +101,9 @@ bool leerImagen(const char* nombreArchivo, std::vector<unsigned char>& datosImag
 
  3. Recorre el árbol y genera los codigos de Huffman (f:=f_{01}=f_0 + f_1, con 0 si se encuentra a la izquierda del nodo raiz
     y con 1 si se encuentra a la derecha).
+
+ 4. Utiliza la biblioteca stb_image.h para leer la imagen y guardar los datos en la variable datosImagen junto con las dimensiones de la misma
+    y el numero de canales (por ejemplo si es RGB o RGBA).
+
+ 5. Utiliza la biblioteca stb_image_write.h para escribir una imagen en formato PNG.
  */
