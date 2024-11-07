@@ -75,17 +75,81 @@ bool escribirImagen(const char* nombreArchivo, const std::vector<unsigned char>&
     return true;
 }
 
+//6.
+void inicializarCentroides(std::vector<std::vector<int>>& centroides, int k, int ancho, int alto, const std::vector<unsigned char>& datosImagen){
+    for (int i = 0; i < k; ++i) {
+        int indice = (rand() % (ancho*alto))*3;
+        centroides[i] = {datosImagen[indice], datosImagen[indice + 1], datosImagen[indice + 2]};
+    }
+}
 
+//7.
+int centroideCercano(const std::vector<int>& pixel, const std::vector<std::vector<int>>& centroide){
+    int minimoIndice = 0;
+    double mininaDistancia = std::numeric_limits<double>::max();
 
+    for (int i = 0; i < centroide.size(); ++i) {
+        double distancia = sqrt(pow(pixel[0] - centroide[i][0], 2) + pow(pixel[1] - centroide[i][1], 2) + pow(pixel[2] - centroide[i][2], 2));
 
+        if(distancia < mininaDistancia){
+            mininaDistancia = distancia;
+            minimoIndice = i;
+        }
+    }
+    return minimoIndice;
+}
 
+//8.
+void algoritmoKMeans(std::vector<unsigned char>& datosImagen, int ancho, int alto, int k){
+    std::vector<std::vector<int>> centroide(k, std::vector<int>(3));
+    inicializarCentroides(centroide, k, ancho, alto, datosImagen);
 
+    std::vector<int> dims(ancho*alto);
+    bool cambio = true;
+    int contador = 0;
 
+    while (cambio && contador < 100){
+        cambio = false;
+        contador++;
 
+        for (int i = 0; i < ancho*alto; ++i) {
+            std::vector<int> pixel = {datosImagen[i*3], datosImagen[i*3 + 1], datosImagen[i*3 + 2]};
+            int cercano = centroideCercano(pixel, centroide);
 
+            if(dims[i] != cercano){
+                dims[i] = cercano;
+                cambio = true;
+            }
+        }
 
+        std::vector<std::vector<int>> nuevoCentroide(k, std::vector<int>(3,0));
+        std::vector<int> total(k, 0);
 
+        for (int i = 0; i < ancho*alto; ++i) {
+            int dim = dims[i];
+            nuevoCentroide[dim][0] += datosImagen[i*3];
+            nuevoCentroide[dim][1] += datosImagen[i*3 + 1];
+            nuevoCentroide[dim][2] += datosImagen[i*3 + 2];
+            total[dim]++;
+        }
 
+        for (int i = 0; i < k; ++i) {
+            if(total[i] != 0){
+                centroide[i][0] = nuevoCentroide[i][0] / total[i];
+                centroide[i][1] = nuevoCentroide[i][1] / total[i];
+                centroide[i][2] = nuevoCentroide[i][2] / total[i];
+            }
+        }
+
+    }
+
+    for (int i = 0; i < ancho*alto; ++i) {
+        int dim = dims[i];
+        datosImagen[i*3] = centroide[dim][0];
+        datosImagen[i*3 + 1] = centroide[dim][1];
+        datosImagen[i*3 + 2] = centroide[dim][2];
+    }
+}
 
 
 
@@ -106,4 +170,11 @@ bool escribirImagen(const char* nombreArchivo, const std::vector<unsigned char>&
     y el numero de canales (por ejemplo si es RGB o RGBA).
 
  5. Utiliza la biblioteca stb_image_write.h para escribir una imagen en formato PNG.
+
+ 6. Inicializa los centroides de manera aleatoria seleccionando pixeles de la imagen.
+
+ 7. Encuentra el centroide mas cercano a un pixel utilizando la distancia euclidiana.
+
+ 8. Aplica el algoritmo K-Means asignando cada pixel a un centroide y recalculando los centroides hasta que se equilibren o se alcance un numero
+    maximo de iteraciones.
  */

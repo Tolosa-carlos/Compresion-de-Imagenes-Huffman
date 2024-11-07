@@ -30,4 +30,8 @@ void generarCodigo(nodoHuffman* ruta, std::string& caracter, std::unordered_map<
 bool leerImagen(const char* nombreArchivo, std::vector<unsigned char>& datosImagen, int& ancho, int& alto, int& canales); // canales: 1- escala de grisees, 3- RGB, 4- RGBA
 bool escribirImagen(const char* nombreArchivo, const std::vector<unsigned char>& datosImagen, int ancho, int alto, int canales);
 
+void inicializarCentroides(std::vector<std::vector<int>>& centroides, int k, int ancho, int alto, const std::vector<unsigned char>& datosImagen);
+int centroideCercano(const std::vector<int>& pixel, const std::vector<std::vector<int>>& centroide);
+void algoritmoKMeans(std::vector<unsigned char>& datosImagen, int ancho, int alto, int k);
+
 #endif //TPFINAL_HUFFMAN_H
