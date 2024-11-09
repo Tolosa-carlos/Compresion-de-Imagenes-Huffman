@@ -5,6 +5,7 @@
 #include "Huffman.h"
 #include <queue>
 #include <vector>
+using namespace std;
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -38,11 +39,23 @@ nodoHuffman* arbolHuffman(const std::unordered_map<char, int>& frecuencia){
         colaMinima.push(crearNodo('\0', suma, izq, der));
     }
 
+    nodoHuffman* raiz = colaMinima.top();
+    std::unordered_map<char, string> codigoHuffman;
+    generarCodigo(raiz, "", codigoHuffman);
+    cout<< "Codigos de Huffman:\n"<< endl;
+    for (const auto& par : codigoHuffman) {
+        std::cout << par.first << ": " << par.second << std::endl;
+    }
+    string caracter = " ";
+    for (const auto& par : frecuencia){
+        caracter += codigoHuffman[par.first];
+    }
+
     return colaMinima.top();
 }
 
 //3.
-void generarCodigo(nodoHuffman* ruta, const std::string& caracter, std::unordered_map<char, std::string>& codigoHuffman){
+void generarCodigo(nodoHuffman* ruta, const std::string& caracter, unordered_map<char, std::string>& codigoHuffman){
     if(!ruta){
         return;
     }
@@ -51,8 +64,10 @@ void generarCodigo(nodoHuffman* ruta, const std::string& caracter, std::unordere
     }
     generarCodigo(ruta->izq, caracter + "0", codigoHuffman);
     generarCodigo(ruta->der, caracter + "1", codigoHuffman);
+
 }
 
+/*
 //4.
 bool leerImagen(const char* nombreArchivo, std::vector<unsigned char>& datosImagen, int& ancho, int& alto, int& canales){
     unsigned char* datos = stbi_load(nombreArchivo, &ancho, &alto, &canales, 0);
@@ -151,7 +166,7 @@ void algoritmoKMeans(std::vector<unsigned char>& datosImagen, int ancho, int alt
     }
 }
 
-
+*/
 
 
 
