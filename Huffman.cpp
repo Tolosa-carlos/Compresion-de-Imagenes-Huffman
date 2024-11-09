@@ -8,8 +8,10 @@
 using namespace std;
 
 #define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image.h"
 #include "stb_image_write.h"
+
 
 
 //1.
@@ -67,29 +69,149 @@ void generarCodigo(nodoHuffman* ruta, const std::string& caracter, unordered_map
 
 }
 
-/*
+void liberarArbol(nodoHuffman* raiz) {
+    if (!raiz) return;
+
+    liberarArbol(raiz->izq);
+    liberarArbol(raiz->der);
+
+    delete raiz;
+}
+
+
+
+
+
+//Forma 1
+
+
 //4.
-bool leerImagen(const char* nombreArchivo, std::vector<unsigned char>& datosImagen, int& ancho, int& alto, int& canales){
+unsigned char* leerImagen(const char* nombreArchivo, int& ancho, int& alto, int& canales){
     unsigned char* datos = stbi_load(nombreArchivo, &ancho, &alto, &canales, 0);
-    if(!datos){
+    if(datos == nullptr){
         std::cerr<< "Error al leer la imagen." << std::endl;
-        return false;
     }
 
-    datosImagen.assign(datos, datos + (ancho*alto*canales));
-    stbi_image_free(datos);
-    return true;
+    return datos;
 }
 
 //5.
-bool escribirImagen(const char* nombreArchivo, const std::vector<unsigned char>& datosImagen, int ancho, int alto, int canales){
-    if(!stbi_write_png(nombreArchivo, ancho, alto, canales, datosImagen.data(), ancho*canales)){
-        std::cerr<< "Error al escribir la imagen."<< std::endl;
+bool escribirImagen(const char* nombreArchivo, unsigned char* datosImagen, int ancho, int alto, int canales){
+    if(stbi_write_png(nombreArchivo, ancho, alto, canales, datosImagen, ancho*canales)){
+        cout<<"Imagen guardada exitosamente"<< nombreArchivo << endl;
+        return true;
+    } else{
+        cerr<< "Error al guardar la imagen"<< nombreArchivo << endl;
         return false;
     }
-    return true;
 }
 
+
+
+
+
+
+
+
+//Forma 2
+
+/*
+imagen::imagen(const char* nombreArchivo) {
+    if(leer(nombreArchivo)){
+        printf("Read %s\n", nombreArchivo);
+         tamano = ancho*alto*canales;
+    } else{
+        printf("Failed %s\n", nombreArchivo);
+    };
+}
+
+imagen::imagen(int ancho, int alto, int canales) : ancho(ancho), alto(alto), canales(canales){
+    tamano = ancho*alto*canales;
+    datos = new uint8_t[tamano];
+}
+
+imagen::imagen(){
+    stbi_image_free(datos);
+}
+
+imagen::imagen(const imagen& img) : imagen(img.ancho, img.alto, img.canales){
+    memcpy(datos, img.datos, tamano);
+}
+
+
+bool imagen::leer(const char* nombreArchivo){
+    datos = stbi_load(nombreArchivo, &ancho, &alto, &canales, 0);
+    return datos != NULL;
+}
+
+bool imagen::escribir(const char* nombreArchivo){
+    tipoImagen tipo = getTipoImagen(nombreArchivo);
+    int resultado;
+    switch (tipo) {
+        case PNG:
+            resultado = stbi_write_png(nombreArchivo, ancho, alto, canales, datos, ancho*canales);
+            break;
+        case BMP:
+            resultado = stbi_write_bmp(nombreArchivo, ancho, alto, canales, datos);
+            break;
+        case JPG:
+            resultado = stbi_write_jpg(nombreArchivo, ancho, alto, canales, datos, 100);
+            break;
+        case TGA:
+            resultado = stbi_write_tga(nombreArchivo, ancho, alto, canales, datos);
+            break;
+    }
+    return resultado != 0;
+}
+
+tipoImagen getTipoImagen(const char* nombreArchivo){
+    const char* ext = strrchr(nombreArchivo, '.');
+    if (ext != nullptr){
+        if (strcmp(ext, ".png") == 0){
+            return  PNG;
+        }
+        if (strcmp(ext, ".jpg") == 0){
+            return  JPG;
+        }
+        if (strcmp(ext, ".bmp") == 0){
+            return  BMP;
+        }
+        if (strcmp(ext, ".tga") == 0){
+            return  TGA;
+        }
+    }
+    return PNG;
+}
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 //6.
 void inicializarCentroides(std::vector<std::vector<int>>& centroides, int k, int ancho, int alto, const std::vector<unsigned char>& datosImagen){
     for (int i = 0; i < k; ++i) {

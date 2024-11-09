@@ -1,15 +1,13 @@
 # ninja log v6
-7	1368	7528702977938642	CMakeFiles/TPFinal.dir/main.cpp.obj	bdf81d57dd1b04a8
-14	2950	7528702978008961	CMakeFiles/TPFinal.dir/Huffman.cpp.obj	bbc94569c434b5c2
-7	898	7528706955981447	build.ninja	df5e25f43e08d345
-42	3059	7528706958258236	CMakeFiles/TPFinal.dir/Huffman.cpp.obj	bbc94569c434b5c2
-10	2150	7528707407312686	CMakeFiles/TPFinal.dir/Huffman.cpp.obj	bbc94569c434b5c2
-10	1079	7528718569545584	CMakeFiles/TPFinal.dir/main.cpp.obj	bdf81d57dd1b04a8
-15	2547	7528718569598458	CMakeFiles/TPFinal.dir/Huffman.cpp.obj	bbc94569c434b5c2
-9	2292	7528718878848583	CMakeFiles/TPFinal.dir/Huffman.cpp.obj	bbc94569c434b5c2
-8	2420	7528719509316179	CMakeFiles/TPFinal.dir/Huffman.cpp.obj	bbc94569c434b5c2
-9	1524	7528722497965012	CMakeFiles/TPFinal.dir/main.cpp.obj	bdf81d57dd1b04a8
-9	2058	7528722761884779	CMakeFiles/TPFinal.dir/Huffman.cpp.obj	bbc94569c434b5c2
-2059	2310	7528722782385531	TPFinal.exe	3ba9d2d1f43a1b53
-11	890	7528724887104099	CMakeFiles/TPFinal.dir/main.cpp.obj	bdf81d57dd1b04a8
-892	1154	7528724895909249	TPFinal.exe	3ba9d2d1f43a1b53
+26	1847	7528900158554642	CMakeFiles/TPFinal.dir/main.cpp.obj	bdf81d57dd1b04a8
+20	4597	7528902017681515	CMakeFiles/TPFinal.dir/Huffman.cpp.obj	bbc94569c434b5c2
+7	898	7528904649584490	build.ninja	df5e25f43e08d345
+4602	5023	7528902063497927	TPFinal.exe	3ba9d2d1f43a1b53
+11	702	7528904649584490	build.ninja	df5e25f43e08d345
+27	4931	7528905567534389	CMakeFiles/TPFinal.dir/Huffman.cpp.obj	bbc94569c434b5c2
+4933	5304	7528905616586051	TPFinal.exe	3ba9d2d1f43a1b53
+20	1992	7528907402754705	CMakeFiles/TPFinal.dir/main.cpp.obj	bdf81d57dd1b04a8
+1995	2574	7528907422503475	TPFinal.exe	3ba9d2d1f43a1b53
+23	2175	7528917737344444	CMakeFiles/TPFinal.dir/main.cpp.obj	bdf81d57dd1b04a8
+37	4416	7528917737495585	CMakeFiles/TPFinal.dir/Huffman.cpp.obj	bbc94569c434b5c2
+4417	4900	7528917781289821	TPFinal.exe	3ba9d2d1f43a1b53
