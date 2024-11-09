@@ -10,28 +10,28 @@
 #include <unordered_map>
 #include <vector>
 
-struct nodoHuffman{ //Define un nodo del arbol de Huffman que tiene un caracter, su frecuencia y punteros a los dos nodos hijos
-    char caracter;
+#include <iostream>
+#include <unordered_map>
+#include <queue>
+#include <vector>
+#include <string>
+
+struct NodoHuffman {
+    std::string dato;
     int frecuencia;
-    nodoHuffman *izq;
-    nodoHuffman *der;
+    NodoHuffman* izquierda;
+    NodoHuffman* derecha;
 };
 
-struct comparadorFrecuencia{
-    bool operator()(nodoHuffman* izq, nodoHuffman* der){ // Se compara el valor de la frecuencia entre ambos nodos hijos
-        return izq->frecuencia > der->frecuencia;
+struct Comparador {
+    bool operator()(NodoHuffman* a, NodoHuffman* b) {
+        return a->frecuencia > b->frecuencia;
     }
 };
 
-nodoHuffman* crearNodo(char caracter, int frecuencia, nodoHuffman* izq, nodoHuffman* der);
-nodoHuffman* arbolHuffman(const std::unordered_map<char, int>& frecuencia); // Crea el arbol usando una cola de prioridad segun la frecuencia de los caracteres
-void generarCodigo(nodoHuffman* ruta, std::string& caracter, std::unordered_map<char, std::string>& codigoHuffman);
-
-bool leerImagen(const char* nombreArchivo, std::vector<unsigned char>& datosImagen, int& ancho, int& alto, int& canales); // canales: 1- escala de grisees, 3- RGB, 4- RGBA
-bool escribirImagen(const char* nombreArchivo, const std::vector<unsigned char>& datosImagen, int ancho, int alto, int canales);
-
-void inicializarCentroides(std::vector<std::vector<int>>& centroides, int k, int ancho, int alto, const std::vector<unsigned char>& datosImagen);
-int centroideCercano(const std::vector<int>& pixel, const std::vector<std::vector<int>>& centroide);
-void algoritmoKMeans(std::vector<unsigned char>& datosImagen, int ancho, int alto, int k);
-
+// Funciones de Huffman
+NodoHuffman* construirArbol(const std::unordered_map<char, int>& frecuencias);
+void generarCodigos(NodoHuffman* raiz, const std::string& codigo, std::unordered_map<char, std::string>& huffmanCodigo);
+void imprimirCodigos(const std::unordered_map<char, std::string>& huffmanCodigo);
+void liberarArbol(NodoHuffman* raiz);
 #endif //TPFINAL_HUFFMAN_H
