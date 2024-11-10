@@ -13,9 +13,9 @@ int main() {
     arbolHuffman(frecuencias);
 
 
-    const char* rutaEntrada = "prueba.png";
-    const char* rutaSalida = "new.png";
-    int ancho = 640, alto = 480, canales = 3;
+    const char* rutaEntrada = "prueba2.raw";
+    const char* rutaSalida = "new.raw";
+    int ancho = 640, alto = 480, canales = 0;
     unsigned char* datosImagen = leerImagen(rutaEntrada, ancho, alto, canales);
     if(datosImagen == nullptr){
         return 1;
