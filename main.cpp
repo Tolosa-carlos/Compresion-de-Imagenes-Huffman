@@ -6,28 +6,52 @@ using namespace std;
 
 int main() {
 
-    const unordered_map<char, int> frecuencias = {
+    /*const unordered_map<char, int> frecuencias = {
             {'a', 5}, {'b', 9}, {'c', 12}, {'d', 13}
     };
 
-    arbolHuffman(frecuencias);
+    arbolHuffman(frecuencias);*/
 
 
     const char* rutaEntrada = "prueba2.raw";
     const char* rutaSalida = "new.raw";
-    int ancho = 640, alto = 480, canales = 0;
+    int ancho = 640, alto = 480, canales = 1;
+
+    // Leer la imagen en datos de píxeles
     unsigned char* datosImagen = leerImagen(rutaEntrada, ancho, alto, canales);
-    if(datosImagen == nullptr){
+    if (datosImagen == nullptr) {
         return 1;
     }
 
-    if(!escribirImagen(rutaSalida, datosImagen, ancho, alto, canales)){
-        stbi_image_free(datosImagen);
+    // Calcular la frecuencia de cada valor de píxel
+    std::unordered_map<unsigned char, int> frecuencia;
+    for (int i = 0; i < ancho * alto * canales; i++) {
+        frecuencia[datosImagen[i]]++;
+    }
+
+    // Construir el árbol de Huffman y generar los códigos de Huffman
+    nodoHuffman* raiz = arbolHuffman(frecuencia);
+    std::unordered_map<unsigned char, std::string> codigoHuffman;
+    generarCodigo(raiz, "", codigoHuffman);
+
+    // Codificar la imagen usando el árbol de Huffman
+    std::string datosComprimidos;
+    for (int i = 0; i < ancho * alto * canales; i++) {
+        datosComprimidos += codigoHuffman[datosImagen[i]];
+    }
+
+    // Guardar los datos comprimidos en el archivo de salida
+    if (!escribirImagenComprimida(rutaSalida, datosComprimidos, codigoHuffman)) {
+        std::cerr << "Error al escribir el archivo comprimido.\n";
+        liberarArbol(raiz);
+        delete[] datosImagen;
         return 1;
     }
 
-    stbi_image_free(datosImagen);
-
+    liberarArbol(raiz);
+    delete[] datosImagen;
+    std::cout << "Compresión completada exitosamente.\n";
+    return 0;
 
 /*
     imagen prueba("prueba.png");

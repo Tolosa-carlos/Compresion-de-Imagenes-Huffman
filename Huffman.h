@@ -28,16 +28,12 @@ struct comparadorFrecuencia{
 
 
 
-nodoHuffman* crearNodo(char caracter, int frecuencia, nodoHuffman* izq, nodoHuffman* der);
-nodoHuffman* arbolHuffman(const std::unordered_map<char, int>& frecuencia); // Crea el arbol usando una cola de prioridad segun la frecuencia de los caracteres
-void generarCodigo(nodoHuffman* ruta, const std::string& caracter, std::unordered_map<char, std::string>& codigoHuffman);
+nodoHuffman* crearNodo(unsigned char caracter, int frecuencia, nodoHuffman* izq, nodoHuffman* der);
+nodoHuffman* arbolHuffman(const std::unordered_map<unsigned char, int>& frecuencia); // Crea el arbol usando una cola de prioridad segun la frecuencia de los caracteres
+void generarCodigo(nodoHuffman* nodo, const std::string& codigoActual, std::unordered_map<unsigned char, std::string>& codigoHuffman);
 void liberarArbol(nodoHuffman* raiz);
-
-
-
-
-unsigned char* leerImagen(const char* nombreArchivo, int& ancho, int& alto, int& canales); // canales: 1- escala de grisees, 3- RGB, 4- RGBA
-bool escribirImagen(const char* nombreArchivo, unsigned char* datosImagen, int ancho, int alto, int canales);
+unsigned char* leerImagen(const char* ruta, int ancho, int alto, int canales); // canales: 1- escala de grisees, 3- RGB, 4- RGBA
+bool escribirImagenComprimida(const char* ruta, const std::string& datosComprimidos, const std::unordered_map<unsigned char, std::string>& codigoHuffman);
 
 
 
