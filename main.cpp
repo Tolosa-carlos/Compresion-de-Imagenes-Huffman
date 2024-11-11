@@ -1,7 +1,12 @@
 #include "Huffman.h"
-#include "stb_image.h"
-#include "stb_image_write.h"
+#include <iostream>
+#include <fstream>
 #include <unordered_map>
+#include <vector>
+#include <cmath>
+#include <queue>
+#include <string>
+#include <cstdlib>
 using namespace std;
 
 int main() {
@@ -13,44 +18,43 @@ int main() {
     arbolHuffman(frecuencias);*/
 
 
-    const char* rutaEntrada = "prueba2.raw";
-    const char* rutaSalida = "new.raw";
-    int ancho = 640, alto = 480, canales = 1;
+    // Supongamos que cargamos la imagen en un vector de colores de 32 bits
+    const char* rutaEntrada = "prueba.raw";
+    int ancho = 640, alto = 480; // Ajustar el tamaño según tu imagen RAW
+    int k = 16; // Número de colores en la paleta
 
-    // Leer la imagen en datos de píxeles
-    unsigned char* datosImagen = leerImagen(rutaEntrada, ancho, alto, canales);
-    if (datosImagen == nullptr) {
+    // Leer la imagen desde el archivo RAW
+    std::vector<uint32_t> imagen = leerImagenRAW(rutaEntrada, ancho, alto);
+    if (imagen.empty()) {
         return 1;
     }
 
-    // Calcular la frecuencia de cada valor de píxel
-    std::unordered_map<unsigned char, int> frecuencia;
-    for (int i = 0; i < ancho * alto * canales; i++) {
-        frecuencia[datosImagen[i]]++;
+    // Cuantización de colores
+    std::vector<uint32_t> imagenCuantizada = cuantizarColores(imagen, k);
+
+    // Calcular frecuencias de colores cuantizados
+    std::unordered_map<uint32_t, int> frecuencias;
+    for (uint32_t color : imagenCuantizada) {
+        frecuencias[color]++;
     }
 
-    // Construir el árbol de Huffman y generar los códigos de Huffman
-    nodoHuffman* raiz = arbolHuffman(frecuencia);
-    std::unordered_map<unsigned char, std::string> codigoHuffman;
+    // Construir el árbol de Huffman y generar códigos
+    nodoHuffman* raiz = arbolHuffman(frecuencias);
+    std::unordered_map<uint32_t, std::string> codigoHuffman;
     generarCodigo(raiz, "", codigoHuffman);
 
-    // Codificar la imagen usando el árbol de Huffman
-    std::string datosComprimidos;
-    for (int i = 0; i < ancho * alto * canales; i++) {
-        datosComprimidos += codigoHuffman[datosImagen[i]];
-    }
+    // Comprimir la imagen usando Huffman
+    std::string datosComprimidos = comprimirImagen(imagenCuantizada, codigoHuffman);
 
-    // Guardar los datos comprimidos en el archivo de salida
-    if (!escribirImagenComprimida(rutaSalida, datosComprimidos, codigoHuffman)) {
+    // Guardar la imagen comprimida
+    const char* rutaSalida = "imagen_comprimida.huff";
+    if (!guardarImagenComprimida(rutaSalida, datosComprimidos, codigoHuffman)) {
         std::cerr << "Error al escribir el archivo comprimido.\n";
-        liberarArbol(raiz);
-        delete[] datosImagen;
-        return 1;
     }
 
+    // Liberar memoria
     liberarArbol(raiz);
-    delete[] datosImagen;
-    std::cout << "Compresión completada exitosamente.\n";
+    // Función para liberar el árbol de Huffman...
     return 0;
 
 /*

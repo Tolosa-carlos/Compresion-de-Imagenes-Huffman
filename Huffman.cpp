@@ -4,9 +4,14 @@
 
 #include "Huffman.h"
 
+#include <iostream>
 #include <fstream>
-#include <queue>
+#include <unordered_map>
 #include <vector>
+#include <cmath>
+#include <queue>
+#include <string>
+#include <cstdlib>
 using namespace std;
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -15,9 +20,9 @@ using namespace std;
 #include "stb_image_write.h"
 
 // Función para crear un nuevo nodo de Huffman
-nodoHuffman* crearNodo(unsigned char caracter, int frecuencia, nodoHuffman* izq, nodoHuffman* der) {
+nodoHuffman* crearNodo(uint32_t color, int frecuencia, nodoHuffman* izq, nodoHuffman* der) {
     nodoHuffman* nodo = new nodoHuffman();
-    nodo->caracter = caracter;
+    nodo->color = color;
     nodo->frecuencia = frecuencia;
     nodo->izq = izq;
     nodo->der = der;
@@ -25,55 +30,98 @@ nodoHuffman* crearNodo(unsigned char caracter, int frecuencia, nodoHuffman* izq,
 }
 
 // Función para construir el árbol de Huffman
-nodoHuffman* arbolHuffman(const std::unordered_map<unsigned char, int>& frecuencia) {
+nodoHuffman* arbolHuffman(const std::unordered_map<uint32_t, int>& frecuencia) {
     std::priority_queue<nodoHuffman*, std::vector<nodoHuffman*>, comparadorFrecuencia> colaMinima;
-
-    // Crear un nodo para cada valor de píxel con su frecuencia
-    for (const auto& entrada : frecuencia) {
-        colaMinima.push(crearNodo(entrada.first, entrada.second, nullptr, nullptr));
+    for (const auto& par : frecuencia) {
+        colaMinima.push(crearNodo(par.first, par.second, nullptr, nullptr));
     }
 
-    // Construir el árbol de Huffman
     while (colaMinima.size() > 1) {
         nodoHuffman* izq = colaMinima.top(); colaMinima.pop();
         nodoHuffman* der = colaMinima.top(); colaMinima.pop();
         int suma = izq->frecuencia + der->frecuencia;
-        colaMinima.push(crearNodo('\0', suma, izq, der));
+        colaMinima.push(crearNodo(0, suma, izq, der));
     }
 
     return colaMinima.top();
 }
 
 // Función para generar códigos de Huffman
-void generarCodigo(nodoHuffman* nodo, const std::string& codigoActual, std::unordered_map<unsigned char, std::string>& codigoHuffman) {
+void generarCodigo(nodoHuffman* nodo, const std::string& codigoActual, std::unordered_map<uint32_t, std::string>& codigoHuffman) {
     if (!nodo) return;
     if (!nodo->izq && !nodo->der) {
-        codigoHuffman[nodo->caracter] = codigoActual;
+        codigoHuffman[nodo->color] = codigoActual;
     }
     generarCodigo(nodo->izq, codigoActual + "0", codigoHuffman);
     generarCodigo(nodo->der, codigoActual + "1", codigoHuffman);
 }
 
+//Cuantizacion de colores usando k-means
+std::vector<uint32_t> cuantizarColores(std::vector<uint32_t> &imagen, int k) {
+    // Implementación del algoritmo K-means para reducir el número de colores
+    std::vector<uint32_t> paleta;  // Vector de colores cuantizados
+    // Inicialización y algoritmo K-means...
+    return paleta;
+}
+
+// Funcion para comprimir la imagen cuantizada usando huffman
+std::string comprimirImagen(std::vector<uint32_t> &imagenCuantizada, std::unordered_map<uint32_t, std::string> &codigoHuffman) {
+    std::string datosComprimidos;
+    for (uint32_t color : imagenCuantizada) {
+        datosComprimidos += codigoHuffman[color];
+    }
+    return datosComprimidos;
+}
+
+// Guardar la imagen comprimida
+bool guardarImagenComprimida(const char *ruta, const std::string &datosComprimidos, const std::unordered_map<uint32_t, std::string> &codigoHuffman) {
+    std::ofstream archivo(ruta, std::ios::binary);
+    if (!archivo.is_open()) {
+        std::cerr << "Error al abrir el archivo de salida.\n";
+        return false;
+    }
+
+    // Guardar el árbol de Huffman o los códigos de colores
+    for (const auto& par : codigoHuffman) {
+        archivo.write(reinterpret_cast<const char*>(&par.first), sizeof(par.first));
+        int tamaño = par.second.size();
+        archivo.write(reinterpret_cast<const char*>(&tamaño), sizeof(tamaño));
+        archivo.write(par.second.c_str(), tamaño);
+    }
+
+    // Guardar datos comprimidos
+    archivo.write(datosComprimidos.c_str(), datosComprimidos.size());
+    archivo.close();
+    return true;
+}
+
 // Función para liberar el árbol de Huffman
 void liberarArbol(nodoHuffman* raiz) {
-    if (!raiz) return;
+    if (raiz == nullptr) return;
     liberarArbol(raiz->izq);
     liberarArbol(raiz->der);
     delete raiz;
 }
 
 // Leer imagen en formato RAW
-unsigned char* leerImagen(const char* ruta, int ancho, int alto, int canales) {
+std::vector<uint32_t> leerImagenRAW(const char* ruta, int ancho, int alto) {
     std::ifstream archivo(ruta, std::ios::binary);
     if (!archivo.is_open()) {
         std::cerr << "Error al abrir el archivo de entrada.\n";
-        return nullptr;
+        return {};
     }
-    int tamaño = ancho * alto * canales;
-    unsigned char* datos = new unsigned char[tamaño];
-    archivo.read(reinterpret_cast<char*>(datos), tamaño);
+
+    int tamaño = ancho * alto;
+    std::vector<uint32_t> imagen(tamaño);
+    archivo.read(reinterpret_cast<char*>(imagen.data()), tamaño * sizeof(uint32_t));
+
+    if (!archivo) {
+        std::cerr << "Error al leer los datos de la imagen.\n";
+        return {};
+    }
+
     archivo.close();
-    return datos;
+    return imagen;
 }
 
 // Escribir imagen comprimida en formato binario

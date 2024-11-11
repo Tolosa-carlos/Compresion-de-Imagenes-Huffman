@@ -7,14 +7,17 @@
 
 
 #include <iostream>
+#include <fstream>
 #include <unordered_map>
 #include <vector>
+#include <cmath>
+#include <queue>
+#include <string>
+#include <cstdlib>
 
-#include <stdint.h>
-#include <cstdio>
-
-struct nodoHuffman{ //Define un nodo del arbol de Huffman que tiene un caracter, su frecuencia y punteros a los dos nodos hijos
-    char caracter;
+//estructura de un nodo para el arbol de huffman
+struct nodoHuffman{
+    uint32_t color;  // Color comprimido en 32 bits (RGBA)
     int frecuencia;
     nodoHuffman *izq;
     nodoHuffman *der;
@@ -28,11 +31,14 @@ struct comparadorFrecuencia{
 
 
 
-nodoHuffman* crearNodo(unsigned char caracter, int frecuencia, nodoHuffman* izq, nodoHuffman* der);
-nodoHuffman* arbolHuffman(const std::unordered_map<unsigned char, int>& frecuencia); // Crea el arbol usando una cola de prioridad segun la frecuencia de los caracteres
-void generarCodigo(nodoHuffman* nodo, const std::string& codigoActual, std::unordered_map<unsigned char, std::string>& codigoHuffman);
+nodoHuffman* crearNodo(uint32_t color, int frecuencia, nodoHuffman* izq, nodoHuffman* der);
+nodoHuffman* arbolHuffman(const std::unordered_map<uint32_t, int>& frecuencia); // Crea el arbol usando una cola de prioridad segun la frecuencia de los caracteres
+void generarCodigo(nodoHuffman* nodo, const std::string& codigoActual, std::unordered_map<uint32_t, std::string>& codigoHuffman);
+std::vector<uint32_t> cuantizarColores(std::vector<uint32_t>& imagen, int k);
+std::string comprimirImagen(std::vector<uint32_t>& imagenCuantizada, std::unordered_map<uint32_t, std::string>& codigoHuffman);
+bool guardarImagenComprimida(const char* ruta, const std::string& datosComprimidos, const std::unordered_map<uint32_t, std::string>& codigoHuffman);
 void liberarArbol(nodoHuffman* raiz);
-unsigned char* leerImagen(const char* ruta, int ancho, int alto, int canales); // canales: 1- escala de grisees, 3- RGB, 4- RGBA
+std::vector<uint32_t> leerImagenRAW(const char* ruta, int ancho, int alto); // canales: 1- escala de grisees, 3- RGB, 4- RGBA
 bool escribirImagenComprimida(const char* ruta, const std::string& datosComprimidos, const std::unordered_map<unsigned char, std::string>& codigoHuffman);
 
 
