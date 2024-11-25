@@ -75,15 +75,19 @@ std::string comprimirImagen(std::vector<uint32_t> &imagenCuantizada, std::unorde
 
 // Guardar la imagen comprimida
 bool guardarImagenComprimida(const char *ruta, const std::string &datosComprimidos, const std::unordered_map<uint32_t, std::string> &codigoHuffman) {
+    //abre el archivo indicado por ruta en modo binario
     std::ofstream archivo(ruta, std::ios::binary);
+    //verifica si el archivo se puede abrir correctamente
     if (!archivo.is_open()) {
         std::cerr << "Error al abrir el archivo de salida.\n";
         return false;
     }
 
-    // Guardar el árbol de Huffman o los códigos de colores
+    // el bucle for itera sobre todos los elementos del codigoHuffman
     for (const auto& par : codigoHuffman) {
+        //se usa archivo.write para escribir los datos binarios directamente al archivo.
         archivo.write(reinterpret_cast<const char*>(&par.first), sizeof(par.first));
+        //se calcula el tamaño del código Huffman asociado al color y lo guarda.
         int tamaño = par.second.size();
         archivo.write(reinterpret_cast<const char*>(&tamaño), sizeof(tamaño));
         archivo.write(par.second.c_str(), tamaño);
@@ -91,6 +95,7 @@ bool guardarImagenComprimida(const char *ruta, const std::string &datosComprimid
 
     // Guardar datos comprimidos
     archivo.write(datosComprimidos.c_str(), datosComprimidos.size());
+    //se cierra el archivo liberando los recursos asociados
     archivo.close();
     return true;
 }
